@@ -12,20 +12,28 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
-from typing import final
 
 from frequenz.api.common.v1alpha8.grid.delivery_area_pb2 import (
     DeliveryArea as PBDeliveryArea,
 )
 from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_components_pb2 import (
-    ElectricalComponentCategory as PBComponentCategory,
+    BatteryType as PBBatteryType,
+)
+from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_components_pb2 import (
+    EvChargerType as PBEvChargerType,
+)
+from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_components_pb2 import (
+    InverterType as PBInverterType,
 )
 from frequenz.api.common.v1alpha8.microgrid.microgrid_pb2 import (
     Microgrid as PBMicrogrid,
 )
 from frequenz.api.common.v1alpha8.types.location_pb2 import Location as PBLocation
 from frequenz.client.common.microgrid import EnterpriseId, MicrogridId
-from frequenz.core.id import BaseId
+from frequenz.client.common.microgrid.electrical_components import (
+    ElectricalComponentCategory,
+    ElectricalComponentId,
+)
 
 
 @dataclass(frozen=True)
@@ -142,78 +150,97 @@ class Microgrid:
         )
 
 
-@final
-class ElectricalComponentId(BaseId, str_prefix="ECID"):
-    """A unique identifier for an electrical component."""
+class BatteryType(Enum):
+    """Enum representing the type of battery."""
+
+    UNSPECIFIED = PBBatteryType.BATTERY_TYPE_UNSPECIFIED
+    """Unspecified type of battery."""
+
+    LI_ION = PBBatteryType.BATTERY_TYPE_LI_ION
+    """Lithium-ion battery."""
+
+    NA_ION = PBBatteryType.BATTERY_TYPE_NA_ION
+    """Sodium-ion battery."""
 
 
-class ElectricalComponentCategory(Enum):
-    """Enumeration of electrical component categories."""
+@dataclass(frozen=True)
+class Battery:
+    """A wrapper class for the protobuf Battery message."""
 
-    UNSPECIFIED = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_UNSPECIFIED
-    """Unspecified component category."""
+    type: BatteryType
+    """The type of battery."""
 
-    GRID_CONNECTION_POINT = (
-        PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_GRID_CONNECTION_POINT
-    )
-    """A grid connection point electrical component."""
 
-    METER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_METER
-    """A meter electrical component."""
+class EvChargerType(Enum):
+    """Enum representing the type of EV charger."""
 
-    INVERTER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_INVERTER
-    """An inverter electrical component."""
+    UNSPECIFIED = PBEvChargerType.EV_CHARGER_TYPE_UNSPECIFIED
+    """Unspecified type of EV charger."""
 
-    CONVERTER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_CONVERTER
-    """A converter electrical component."""
+    AC = PBEvChargerType.EV_CHARGER_TYPE_AC
+    """The EV charging station supports AC charging only."""
 
-    BATTERY = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_BATTERY
-    """A battery electrical component."""
+    DC = PBEvChargerType.EV_CHARGER_TYPE_DC
+    """The EV charging station supports DC charging only."""
 
-    EV_CHARGER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_EV_CHARGER
-    """An electric vehicle charger electrical component."""
+    HYBRID = PBEvChargerType.EV_CHARGER_TYPE_HYBRID
+    """The EV charging station supports both AC and DC."""
 
-    BREAKER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_BREAKER
-    """A breaker electrical component."""
 
-    PRECHARGER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_PRECHARGER
-    """A precharger electrical component."""
+@dataclass(frozen=True)
+class EvCharger:
+    """A wrapper class for the protobuf EvCharger message."""
 
-    CHP = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_CHP
-    """A combined heat and power unit electrical component."""
+    type: EvChargerType
+    """The type of EV charger."""
 
-    ELECTROLYZER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_ELECTROLYZER
-    """An electrolyzer electrical component."""
 
-    POWER_TRANSFORMER = (
-        PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_POWER_TRANSFORMER
-    )
-    """A power transformer electrical component."""
+@dataclass(frozen=True)
+class GridConnectionPoint:
+    """A wrapper class for the protobuf GridConnectionPoint message."""
 
-    HVAC = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_HVAC
-    """An HVAC system electrical component."""
+    rated_fuse_current: int
+    """The rated fuse current of the grid connection point."""
 
-    PLC = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_PLC
-    """A programmable logic controller electrical component."""
 
-    CRYPTO_MINER = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_CRYPTO_MINER
-    """A crypto miner electrical component."""
+class InverterType(Enum):
+    """Enum representing the type of inverter."""
 
-    STATIC_TRANSFER_SWITCH = (
-        PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_STATIC_TRANSFER_SWITCH
-    )
-    """A static transfer switch electrical component."""
+    UNSPECIFIED = PBInverterType.INVERTER_TYPE_UNSPECIFIED
+    """Unspecified type of inverter."""
 
-    UNINTERRUPTIBLE_POWER_SUPPLY = (
-        PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_UNINTERRUPTIBLE_POWER_SUPPLY
-    )
-    """An uninterruptible power supply electrical component."""
+    BATTERY = PBInverterType.INVERTER_TYPE_BATTERY
+    """Battery inverter."""
 
-    CAPACITOR_BANK = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_CAPACITOR_BANK
-    """A capacitor bank electrical component."""
+    PV = PBInverterType.INVERTER_TYPE_PV
+    """PV (photovoltaic) inverter."""
 
-    WIND_TURBINE = PBComponentCategory.ELECTRICAL_COMPONENT_CATEGORY_WIND_TURBINE
-    """A wind turbine electrical component."""
+    HYBRID = PBInverterType.INVERTER_TYPE_HYBRID
+    """Hybrid inverter."""
+
+
+@dataclass(frozen=True)
+class Inverter:
+    """A wrapper class for the protobuf Inverter message."""
+
+    type: InverterType
+    """The type of inverter."""
+
+
+@dataclass(frozen=True)
+class PowerTransformer:
+    """A wrapper class for the protobuf PowerTransformer message."""
+
+    primary: float
+    """The primary of the power transformer."""
+
+    secondary: float
+    """The secondary of the power transformer."""
+
+
+ElectricalComponentCategorySpecificInfo = (
+    Battery | EvCharger | GridConnectionPoint | Inverter | PowerTransformer
+)
 
 
 @dataclass(frozen=True)
@@ -235,6 +262,9 @@ class ElectricalComponent:
 
     category: ElectricalComponentCategory
     """The component category. E.g., Inverter, Battery, etc."""
+
+    category_specific_info: ElectricalComponentCategorySpecificInfo | None
+    """Category-specific information for the electrical component."""
 
     manufacturer: str
     """The manufacturer of the electrical component."""
