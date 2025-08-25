@@ -17,6 +17,43 @@ from frequenz.client.assets.types import (
 )
 
 
+class MicrogridJSONEncoder(json.JSONEncoder):
+    """Custom JSON encoder for Microgrid objects."""
+
+    def default(self, o: Any) -> Any:
+        """Convert Microgrid objects to JSON-serializable format."""
+        if isinstance(o, Microgrid):
+            return self._serialize_microgrid(o)
+        # Let the base class handle other types
+        return super().default(o)
+
+    def _serialize_microgrid(self, microgrid: Microgrid) -> dict[str, Any]:
+        """Serialize a Microgrid to a dictionary."""
+        result = {
+            "id": str(microgrid.id),
+            "enterprise_id": str(microgrid.enterprise_id),
+            "name": microgrid.name,
+            "status": microgrid.status,
+            "create_time": microgrid.create_time.isoformat(),
+        }
+
+        # Handle optional fields
+        if microgrid.delivery_area:
+            result["delivery_area"] = {
+                "code": microgrid.delivery_area.code,
+                "code_type": microgrid.delivery_area.code_type,
+            }
+
+        if microgrid.location:
+            result["location"] = {
+                "latitude": microgrid.location.latitude,
+                "longitude": microgrid.location.longitude,
+                "country_code": microgrid.location.country_code,
+            }
+
+        return result
+
+
 class ElectricalComponentJSONEncoder(json.JSONEncoder):
     """Custom JSON encoder for ElectricalComponent objects."""
 
@@ -67,28 +104,33 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
 
 def print_microgrid_details(microgrid: Microgrid) -> None:
     """
-    Print microgrid details to console in JSON format.
+    Print microgrid details to console in JSON format using custom encoder.
 
-    This function converts the Microgrid instance to a dictionary and
-    outputs it as formatted JSON to the console. The output is designed
-    to be machine-readable and can be piped to tools like jq for further
-    processing.
+    This function converts the Microgrid instance to JSON using a custom
+    encoder and outputs it as formatted JSON to the console. The output is
+    designed to be machine-readable and can be piped to tools like jq for
+    further processing.
 
     Args:
         microgrid: The Microgrid instance to print to console.
     """
-    microgrid_dict = asdict(microgrid)
-    microgrid_dict["id"] = int(microgrid.id)
-    microgrid_dict["enterprise_id"] = int(microgrid.enterprise_id)
-    microgrid_dict["create_time"] = microgrid.create_time.isoformat()
-
-    click.echo(json.dumps(microgrid_dict, indent=2))
+    click.echo(json.dumps(microgrid, cls=MicrogridJSONEncoder, indent=2))
 
 
 def print_electrical_components(
     electrical_components: list[ElectricalComponent],
 ) -> None:
-    """Print electrical components to console in JSON format using custom encoder."""
+    """
+    Print electrical components to console in JSON format using custom encoder.
+
+    This function converts the ElectricalComponent instances to JSON using a custom
+    encoder and outputs it as formatted JSON to the console. The output is
+    designed to be machine-readable and can be piped to tools like jq for
+    further processing.
+
+    Args:
+        electrical_components: The list of ElectricalComponent instances to print to console.
+    """
     click.echo(
         json.dumps(
             electrical_components,
