@@ -2,6 +2,7 @@
 
 import json
 from dataclasses import asdict
+from typing import Any
 
 import asyncclick as click
 
@@ -14,6 +15,54 @@ from frequenz.client.assets.types import (
     Microgrid,
     PowerTransformer,
 )
+
+
+class ElectricalComponentJSONEncoder(json.JSONEncoder):
+    """Custom JSON encoder for ElectricalComponent objects."""
+
+    def default(self, o: Any) -> Any:
+        """Convert ElectricalComponent objects to JSON-serializable format."""
+        if isinstance(o, ElectricalComponent):
+            return self._serialize_electrical_component(o)
+        # Let the base class handle other types
+        return super().default(o)
+
+    def _serialize_electrical_component(
+        self, component: ElectricalComponent
+    ) -> dict[str, Any]:
+        """Serialize an ElectricalComponent to a dictionary."""
+        result = {
+            "id": str(component.id),
+            "microgrid_id": str(component.microgrid_id),
+            "name": component.name,
+            "category": component.category.name,
+            "manufacturer": component.manufacturer,
+            "model_name": component.model_name,
+        }
+
+        # Handle category_specific_info
+        if component.category_specific_info:
+            result["category_specific_info"] = self._serialize_category_specific_info(
+                component.category_specific_info
+            )
+
+        return result
+
+    def _serialize_category_specific_info(self, info: Any) -> dict[str, Any]:
+        """Serialize category specific info based on its type."""
+        if isinstance(info, Battery):
+            return {"type": info.type.name}
+        elif isinstance(info, EvCharger):
+            return {"type": info.type.name}
+        elif isinstance(info, GridConnectionPoint):
+            return {"rated_fuse_current": info.rated_fuse_current}
+        elif isinstance(info, Inverter):
+            return {"type": info.type.name}
+        elif isinstance(info, PowerTransformer):
+            return {"primary": info.primary, "secondary": info.secondary}
+        else:
+            # Fallback to default serialization
+            return asdict(info)
 
 
 def print_microgrid_details(microgrid: Microgrid) -> None:
@@ -39,40 +88,11 @@ def print_microgrid_details(microgrid: Microgrid) -> None:
 def print_electrical_components(
     electrical_components: list[ElectricalComponent],
 ) -> None:
-    """Print electrical components to console in JSON format."""
-    electrical_components_dict = []
-    for component in electrical_components:
-        component_dict = asdict(component)
-
-        # Convert non-serializable objects to serializable formats
-        component_dict["id"] = str(component.id)
-        component_dict["microgrid_id"] = str(component.microgrid_id)
-        component_dict["category"] = component.category.name
-
-        # Handle category_specific_info serialization
-        if component.category_specific_info:
-            if isinstance(component.category_specific_info, Battery):
-                component_dict["category_specific_info"] = {
-                    "type": component.category_specific_info.type.name,
-                }
-            elif isinstance(component.category_specific_info, EvCharger):
-                component_dict["category_specific_info"] = {
-                    "type": component.category_specific_info.type.name,
-                }
-            elif isinstance(component.category_specific_info, GridConnectionPoint):
-                component_dict["category_specific_info"] = {
-                    "rated_fuse_current": component.category_specific_info.rated_fuse_current,
-                }
-            elif isinstance(component.category_specific_info, Inverter):
-                component_dict["category_specific_info"] = {
-                    "type": component.category_specific_info.type.name,
-                }
-            elif isinstance(component.category_specific_info, PowerTransformer):
-                component_dict["category_specific_info"] = {
-                    "primary": component.category_specific_info.primary,
-                    "secondary": component.category_specific_info.secondary,
-                }
-
-        electrical_components_dict.append(component_dict)
-
-    click.echo(json.dumps(electrical_components_dict, indent=2))
+    """Print electrical components to console in JSON format using custom encoder."""
+    click.echo(
+        json.dumps(
+            electrical_components,
+            cls=ElectricalComponentJSONEncoder,
+            indent=2,
+        )
+    )
