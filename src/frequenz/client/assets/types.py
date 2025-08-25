@@ -266,7 +266,7 @@ class ElectricalComponent:
     category: ElectricalComponentCategory
     """The component category. E.g., Inverter, Battery, etc."""
 
-    category_specific_info: ElectricalComponentCategorySpecificInfo | None
+    category_specific_info: ElectricalComponentCategorySpecificInfo
     """Category-specific information for the electrical component."""
 
     manufacturer: str
