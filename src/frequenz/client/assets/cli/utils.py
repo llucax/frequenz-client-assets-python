@@ -83,6 +83,12 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
                 component.category_specific_info
             )
 
+        if component.operational_lifetime:
+            result["operational_lifetime"] = {
+                "start_timestamp": component.operational_lifetime.start_timestamp.isoformat(),
+                "end_timestamp": component.operational_lifetime.end_timestamp.isoformat(),
+            }
+
         return result
 
     def _serialize_category_specific_info(self, info: Any) -> dict[str, Any]:

@@ -248,6 +248,17 @@ ElectricalComponentCategorySpecificInfo = (
 
 
 @dataclass(frozen=True)
+class Lifetime:
+    """A wrapper class for the protobuf Lifetime message."""
+
+    start_time: datetime
+    """The start time of the operational lifetime."""
+
+    end_time: datetime
+    """The end time of the operational lifetime."""
+
+
+@dataclass(frozen=True)
 class ElectricalComponent:
     """A wrapper class for the protobuf ElectricalComponent message.
 
@@ -275,6 +286,8 @@ class ElectricalComponent:
 
     model_name: str
     """The model name of the electrical component."""
+
+    operational_lifetime: str | None
 
     @staticmethod
     def from_protobuf(pb: PBElectricalComponent) -> "ElectricalComponent":
@@ -318,6 +331,17 @@ class ElectricalComponent:
                     rated_fuse_current=grid_connection_point.rated_fuse_current,
                 )
 
+        operational_lifetime: Lifetime | None = None
+        if pb.HasField("operational_lifetime"):
+            operational_lifetime = Lifetime(
+                start_time=pb.operational_lifetime.start_timestamp.ToDatetime().replace(
+                    tzinfo=timezone.utc
+                ),
+                end_time=pb.operational_lifetime.end_timestamp.ToDatetime().replace(
+                    tzinfo=timezone.utc
+                ),
+            )
+
         return ElectricalComponent(
             id=ElectricalComponentId(pb.id),
             microgrid_id=MicrogridId(pb.microgrid_id),
@@ -326,4 +350,5 @@ class ElectricalComponent:
             category_specific_info=category_specific_info,
             manufacturer=pb.manufacturer,
             model_name=pb.model_name,
+            operational_lifetime=operational_lifetime,
         )
