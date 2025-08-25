@@ -12,7 +12,7 @@ from __future__ import annotations
 from frequenz.api.assets.v1 import assets_pb2, assets_pb2_grpc
 from frequenz.client.base.client import BaseApiClient, call_stub_method
 
-from frequenz.client.assets.types import Microgrid
+from frequenz.client.assets.types import ElectricalComponent, Microgrid
 
 from .exceptions import ClientNotConnected
 
@@ -85,3 +85,29 @@ class AssetsApiClient(BaseApiClient[assets_pb2_grpc.PlatformAssetsStub]):
         )
 
         return Microgrid.from_protobuf(response.microgrid)
+
+    async def get_electrical_components(
+        self, microgrid_id: int
+    ) -> list[ElectricalComponent]:
+        """
+        Get the electrical components of a microgrid.
+
+        Args:
+            microgrid_id: The ID of the microgrid to get the electrical components of.
+
+        Returns:
+            The electrical components of the microgrid.
+        """
+        request = assets_pb2.ListMicrogridElectricalComponentsRequest(
+            microgrid_id=microgrid_id,
+        )
+        response = await call_stub_method(
+            self,
+            lambda: self.stub.ListMicrogridElectricalComponents(request),
+            method_name="ListMicrogridElectricalComponents",
+        )
+
+        return [
+            ElectricalComponent.from_protobuf(component)
+            for component in response.components
+        ]

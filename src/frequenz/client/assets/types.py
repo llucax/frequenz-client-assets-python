@@ -20,6 +20,9 @@ from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_com
     BatteryType as PBBatteryType,
 )
 from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_components_pb2 import (
+    ElectricalComponent as PBElectricalComponent,
+)
+from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_components_pb2 import (
     EvChargerType as PBEvChargerType,
 )
 from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_components_pb2 import (
@@ -271,3 +274,16 @@ class ElectricalComponent:
 
     model_name: str
     """The model name of the electrical component."""
+
+    @staticmethod
+    def from_protobuf(pb: PBElectricalComponent) -> "ElectricalComponent":
+        """Create a ElectricalComponent instance from a protobuf message."""
+        return ElectricalComponent(
+            id=ElectricalComponentId(pb.id),
+            microgrid_id=MicrogridId(pb.microgrid_id),
+            name=pb.name,
+            category=ElectricalComponentCategory.UNSPECIFIED,
+            category_specific_info=Battery(type=BatteryType.UNSPECIFIED),
+            manufacturer=pb.manufacturer,
+            model_name=pb.model_name,
+        )
