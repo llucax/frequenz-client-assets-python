@@ -5,7 +5,15 @@ from dataclasses import asdict
 
 import asyncclick as click
 
-from frequenz.client.assets.types import ElectricalComponent, Microgrid
+from frequenz.client.assets.types import (
+    Battery,
+    ElectricalComponent,
+    EvCharger,
+    GridConnectionPoint,
+    Inverter,
+    Microgrid,
+    PowerTransformer,
+)
 
 
 def print_microgrid_details(microgrid: Microgrid) -> None:
@@ -35,17 +43,35 @@ def print_electrical_components(
     electrical_components_dict = []
     for component in electrical_components:
         component_dict = asdict(component)
+
         # Convert non-serializable objects to serializable formats
-        component_dict["id"] = int(component.id)
-        component_dict["microgrid_id"] = int(component.microgrid_id)
-        component_dict["category"] = component.category.value
+        component_dict["id"] = str(component.id)
+        component_dict["microgrid_id"] = str(component.microgrid_id)
+        component_dict["category"] = component.category.name
 
         # Handle category_specific_info serialization
         if component.category_specific_info:
-            if hasattr(component.category_specific_info, "type"):
-                component_dict["category_specific_info"][
-                    "type"
-                ] = component.category_specific_info.type.value
+            if isinstance(component.category_specific_info, Battery):
+                component_dict["category_specific_info"] = {
+                    "type": component.category_specific_info.type.name,
+                }
+            elif isinstance(component.category_specific_info, EvCharger):
+                component_dict["category_specific_info"] = {
+                    "type": component.category_specific_info.type.name,
+                }
+            elif isinstance(component.category_specific_info, GridConnectionPoint):
+                component_dict["category_specific_info"] = {
+                    "rated_fuse_current": component.category_specific_info.rated_fuse_current,
+                }
+            elif isinstance(component.category_specific_info, Inverter):
+                component_dict["category_specific_info"] = {
+                    "type": component.category_specific_info.type.name,
+                }
+            elif isinstance(component.category_specific_info, PowerTransformer):
+                component_dict["category_specific_info"] = {
+                    "primary": component.category_specific_info.primary,
+                    "secondary": component.category_specific_info.secondary,
+                }
 
         electrical_components_dict.append(component_dict)
 

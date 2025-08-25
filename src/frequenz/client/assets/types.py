@@ -32,6 +32,7 @@ from frequenz.api.common.v1alpha8.microgrid.microgrid_pb2 import (
     Microgrid as PBMicrogrid,
 )
 from frequenz.api.common.v1alpha8.types.location_pb2 import Location as PBLocation
+from frequenz.client.common.enum_proto import enum_from_proto
 from frequenz.client.common.microgrid import EnterpriseId, MicrogridId
 from frequenz.client.common.microgrid.electrical_components import (
     ElectricalComponentCategory,
@@ -266,7 +267,7 @@ class ElectricalComponent:
     category: ElectricalComponentCategory
     """The component category. E.g., Inverter, Battery, etc."""
 
-    category_specific_info: ElectricalComponentCategorySpecificInfo
+    category_specific_info: ElectricalComponentCategorySpecificInfo | None
     """Category-specific information for the electrical component."""
 
     manufacturer: str
@@ -278,12 +279,45 @@ class ElectricalComponent:
     @staticmethod
     def from_protobuf(pb: PBElectricalComponent) -> "ElectricalComponent":
         """Create a ElectricalComponent instance from a protobuf message."""
+        category_specific_info: ElectricalComponentCategorySpecificInfo | None = None
+        if pb.HasField("category_specific_info"):
+            if pb.category_specific_info.WhichOneof("kind") == "battery":
+                category_specific_info = Battery(
+                    type=enum_from_proto(
+                        pb.category_specific_info.battery.type, BatteryType
+                    )
+                )
+            elif pb.category_specific_info.WhichOneof("kind") == "ev_charger":
+                category_specific_info = EvCharger(
+                    type=enum_from_proto(
+                        pb.category_specific_info.ev_charger.type, EvChargerType
+                    )
+                )
+            elif pb.category_specific_info.WhichOneof("kind") == "inverter":
+                category_specific_info = Inverter(
+                    type=enum_from_proto(
+                        pb.category_specific_info.inverter.type, InverterType
+                    )
+                )
+            elif pb.category_specific_info.WhichOneof("kind") == "power_transformer":
+                category_specific_info = PowerTransformer(
+                    primary=pb.category_specific_info.power_transformer.primary,
+                    secondary=pb.category_specific_info.power_transformer.secondary,
+                )
+            elif (
+                pb.category_specific_info.WhichOneof("kind") == "grid_connection_point"
+            ):
+                grid_connection_point = pb.category_specific_info.grid_connection_point
+                category_specific_info = GridConnectionPoint(
+                    rated_fuse_current=grid_connection_point.rated_fuse_current,
+                )
+
         return ElectricalComponent(
             id=ElectricalComponentId(pb.id),
             microgrid_id=MicrogridId(pb.microgrid_id),
             name=pb.name,
-            category=ElectricalComponentCategory.UNSPECIFIED,
-            category_specific_info=Battery(type=BatteryType.UNSPECIFIED),
+            category=ElectricalComponentCategory(pb.category),
+            category_specific_info=category_specific_info,
             manufacturer=pb.manufacturer,
             model_name=pb.model_name,
         )
