@@ -32,7 +32,7 @@ from frequenz.api.common.v1alpha8.microgrid.microgrid_pb2 import (
     Microgrid as PBMicrogrid,
 )
 from frequenz.api.common.v1alpha8.types.location_pb2 import Location as PBLocation
-from frequenz.client.common.enum_proto import enum_from_proto
+from frequenz.client.common import enum_proto
 from frequenz.client.common.microgrid import EnterpriseId, MicrogridId
 from frequenz.client.common.microgrid.electrical_components import (
     ElectricalComponentCategory,
@@ -283,20 +283,26 @@ class ElectricalComponent:
         if pb.HasField("category_specific_info"):
             if pb.category_specific_info.WhichOneof("kind") == "battery":
                 category_specific_info = Battery(
-                    type=enum_from_proto(
-                        pb.category_specific_info.battery.type, BatteryType
+                    type=enum_proto.enum_from_proto(
+                        pb.category_specific_info.battery.type,
+                        BatteryType,
+                        allow_invalid=False,
                     )
                 )
             elif pb.category_specific_info.WhichOneof("kind") == "ev_charger":
                 category_specific_info = EvCharger(
-                    type=enum_from_proto(
-                        pb.category_specific_info.ev_charger.type, EvChargerType
+                    type=enum_proto.enum_from_proto(
+                        pb.category_specific_info.ev_charger.type,
+                        EvChargerType,
+                        allow_invalid=False,
                     )
                 )
             elif pb.category_specific_info.WhichOneof("kind") == "inverter":
                 category_specific_info = Inverter(
-                    type=enum_from_proto(
-                        pb.category_specific_info.inverter.type, InverterType
+                    type=enum_proto.enum_from_proto(
+                        pb.category_specific_info.inverter.type,
+                        InverterType,
+                        allow_invalid=False,
                     )
                 )
             elif pb.category_specific_info.WhichOneof("kind") == "power_transformer":

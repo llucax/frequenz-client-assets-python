@@ -68,7 +68,7 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
         self, component: ElectricalComponent
     ) -> dict[str, Any]:
         """Serialize an ElectricalComponent to a dictionary."""
-        result = {
+        result: dict[str, Any] = {
             "id": str(component.id),
             "microgrid_id": str(component.microgrid_id),
             "name": component.name,
@@ -89,17 +89,17 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
         """Serialize category specific info based on its type."""
         if isinstance(info, Battery):
             return {"type": info.type.name}
-        elif isinstance(info, EvCharger):
+        if isinstance(info, EvCharger):
             return {"type": info.type.name}
-        elif isinstance(info, GridConnectionPoint):
+        if isinstance(info, GridConnectionPoint):
             return {"rated_fuse_current": info.rated_fuse_current}
-        elif isinstance(info, Inverter):
+        if isinstance(info, Inverter):
             return {"type": info.type.name}
-        elif isinstance(info, PowerTransformer):
+        if isinstance(info, PowerTransformer):
             return {"primary": info.primary, "secondary": info.secondary}
-        else:
-            # Fallback to default serialization
-            return asdict(info)
+
+        # Fallback to default serialization
+        return asdict(info)
 
 
 def print_microgrid_details(microgrid: Microgrid) -> None:
