@@ -163,7 +163,29 @@ async def get_electrical_components(
     ctx: click.Context,
     microgrid_id: int,
 ) -> None:
-    """Get and display electrical components by microgrid ID."""
+    """
+    Get and display electrical components by microgrid ID.
+
+    This command fetches detailed information about all electrical components
+    in a specific microgrid from the Assets API and displays it in JSON format.
+    The output can be piped to other tools for further processing.
+
+    Args:
+        ctx: Click context object containing the initialized API client.
+        microgrid_id: The unique identifier of the microgrid to retrieve.
+
+    Raises:
+        click.Abort: If there is an error printing the electrical components.
+
+    Example:
+        ```bash
+        # Get details for microgrid with ID 123
+        assets-cli electrical-components 123
+
+        # Pipe output to jq for filtering
+        assets-cli electrical-components 123 | jq ".id"
+        ```
+    """
     try:
         client = ctx.obj["client"]
         electrical_components = await client.get_electrical_components(microgrid_id)
