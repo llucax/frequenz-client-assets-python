@@ -6,7 +6,17 @@
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
-from frequenz.client.assets.types import DeliveryArea, Location, Microgrid
+from frequenz.client.common.microgrid.electrical_components import (
+    ElectricalComponentCategory,
+)
+
+from frequenz.client.assets.enums import BatteryType, Metric
+from frequenz.client.assets.types import (
+    DeliveryArea,
+    ElectricalComponent,
+    Location,
+    Microgrid,
+)
 
 from .test_data import MockData
 
@@ -66,3 +76,77 @@ def create_location_mock(
 def create_response_mock() -> AsyncMock:
     """Create response mocks."""
     return AsyncMock()
+
+
+def create_electrical_component_mock(  # pylint: disable=too-many-arguments
+    component_id: int = MockData.component_id,
+    microgrid_id: int = MockData.microgrid_id,
+    name: str = MockData.component_name,
+    *,
+    manufacturer: str = MockData.component_manufacturer,
+    model_name: str = MockData.component_model_name,
+    has_category_specific_info: bool = True,
+    has_operational_lifetime: bool = True,
+    **overrides: Any,
+) -> AsyncMock:
+    """Create electrical component mocks with defaults."""
+    mock = AsyncMock(name="electrical_component_mock", spec=ElectricalComponent)
+    mock.id = component_id
+    mock.microgrid_id = microgrid_id
+    mock.name = name
+    mock.manufacturer = manufacturer
+    mock.model_name = model_name
+    mock.category = ElectricalComponentCategory.BATTERY
+
+    # Configure HasField to be synchronous (not async)
+    def has_field_side_effect(field_name: str) -> bool:
+        if field_name == "category_specific_info":
+            return has_category_specific_info
+        if field_name == "operational_lifetime":
+            return has_operational_lifetime
+        return False
+
+    mock.HasField = MagicMock(side_effect=has_field_side_effect)
+
+    # Create category specific info
+    if has_category_specific_info:
+        mock.category_specific_info = MagicMock()
+        mock.category_specific_info.WhichOneof.return_value = "battery"
+        mock.category_specific_info.battery = MagicMock()
+        mock.category_specific_info.battery.type = BatteryType.LI_ION.value
+
+    # Create operational lifetime
+    if has_operational_lifetime:
+        mock.operational_lifetime = MagicMock()
+        mock_start_timestamp = MagicMock()
+        mock_start_timestamp.ToDatetime.return_value = MockData.start_time
+        mock.operational_lifetime.start_timestamp = mock_start_timestamp
+
+        mock_end_timestamp = MagicMock()
+        mock_end_timestamp.ToDatetime.return_value = MockData.end_time
+        mock.operational_lifetime.end_timestamp = mock_end_timestamp
+
+    # Create metric config bounds
+    mock_metric_config_bounds = MagicMock()
+    mock_metric_config_bounds.metric = Metric.BATTERY_SOC_PCT.value
+    mock_metric_config_bounds.config_bounds = MagicMock()
+    mock_metric_config_bounds.config_bounds.lower = MockData.metric_lower_bound
+    mock_metric_config_bounds.config_bounds.upper = MockData.metric_upper_bound
+    mock.metric_config_bounds = [mock_metric_config_bounds]
+
+    # Apply any overrides
+    for key, value in overrides.items():
+        setattr(mock, key, value)
+
+    return mock
+
+
+def create_electrical_components_response_mock(
+    components: list[AsyncMock] | None = None,
+) -> AsyncMock:
+    """Create electrical components response mock."""
+    mock_response = AsyncMock()
+    if components is None:
+        components = [create_electrical_component_mock()]
+    mock_response.components = components
+    return mock_response

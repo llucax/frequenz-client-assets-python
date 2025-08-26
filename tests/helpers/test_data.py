@@ -27,6 +27,20 @@ class MockData:  # pylint: disable=too-many-instance-attributes
     longitude: float = 13.4050
     country_code: str = "DE"
 
+    # Electrical component data
+    component_id: int = 123
+    component_name: str = "Test Battery"
+    component_manufacturer: str = "Test Manufacturer"
+    component_model_name: str = "Test Model"
+
+    # Metric config bounds data
+    metric_lower_bound: float = 10.0
+    metric_upper_bound: float = 90.0
+
+    # Operational lifetime data
+    start_time: datetime = datetime(2023, 1, 1, tzinfo=timezone.utc)
+    end_time: datetime = datetime(2030, 1, 1, tzinfo=timezone.utc)
+
     # Server config
     server_url: str = "grpc://test.example.com:443"
     auth_key: str = "test-key"
