@@ -79,8 +79,16 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
                 {
                     "metric": metric_config_bound.metric.name,
                     "config_bounds": {
-                        "lower": metric_config_bound.config_bounds.lower,
-                        "upper": metric_config_bound.config_bounds.upper,
+                        "lower": (
+                            metric_config_bound.config_bounds.lower
+                            if metric_config_bound.config_bounds
+                            else None
+                        ),
+                        "upper": (
+                            metric_config_bound.config_bounds.upper
+                            if metric_config_bound.config_bounds
+                            else None
+                        ),
                     },
                 }
                 for metric_config_bound in component.metric_config_bounds
@@ -95,8 +103,8 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
 
         if component.operational_lifetime:
             result["operational_lifetime"] = {
-                "start_timestamp": component.operational_lifetime.start_timestamp.isoformat(),
-                "end_timestamp": component.operational_lifetime.end_timestamp.isoformat(),
+                "start_time": component.operational_lifetime.start_time.isoformat(),
+                "end_time": component.operational_lifetime.end_time.isoformat(),
             }
 
         return result
