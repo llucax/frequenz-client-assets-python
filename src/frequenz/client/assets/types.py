@@ -29,7 +29,12 @@ from frequenz.client.common.microgrid.electrical_components import (
     ElectricalComponentId,
 )
 
-from frequenz.client.assets.enums import BatteryType, EvChargerType, InverterType
+from frequenz.client.assets.enums import (
+    BatteryType,
+    EvChargerType,
+    InverterType,
+    Metric,
+)
 
 
 @dataclass(frozen=True)
@@ -206,6 +211,28 @@ class Lifetime:
 
 
 @dataclass(frozen=True)
+class Bound:
+    """A wrapper class for the protobuf Bound message."""
+
+    lower: float | None
+    """The lower bound of the bound."""
+
+    upper: float | None
+    """The upper bound of the bound."""
+
+
+@dataclass(frozen=True)
+class MetricConfigBounds:
+    """A wrapper class for the protobuf MetricConfigBounds message."""
+
+    metric: Metric
+    """The metric."""
+
+    config_bounds: Bound | None
+    """The config bounds of the metric."""
+
+
+@dataclass(frozen=True)
 class ElectricalComponent:
     """A wrapper class for the protobuf ElectricalComponent message.
 
@@ -234,8 +261,11 @@ class ElectricalComponent:
     model_name: str
     """The model name of the electrical component."""
 
-    operational_lifetime: str | None
+    operational_lifetime: Lifetime | None
     """The operational lifetime of the electrical component."""
+
+    metric_config_bounds: list[MetricConfigBounds]
+    """The metric config bounds of the electrical component."""
 
     @staticmethod
     def from_protobuf(pb: PBElectricalComponent) -> "ElectricalComponent":
@@ -290,6 +320,19 @@ class ElectricalComponent:
                 ),
             )
 
+        metric_config_bounds: list[MetricConfigBounds] = [
+            MetricConfigBounds(
+                metric=enum_proto.enum_from_proto(
+                    pb_metric_config_bounds.metric, Metric, allow_invalid=False
+                ),
+                config_bounds=Bound(
+                    lower=pb_metric_config_bounds.config_bounds.lower,
+                    upper=pb_metric_config_bounds.config_bounds.upper,
+                ),
+            )
+            for pb_metric_config_bounds in pb.metric_config_bounds
+        ]
+
         return ElectricalComponent(
             id=ElectricalComponentId(pb.id),
             microgrid_id=MicrogridId(pb.microgrid_id),
@@ -299,4 +342,5 @@ class ElectricalComponent:
             manufacturer=pb.manufacturer,
             model_name=pb.model_name,
             operational_lifetime=operational_lifetime,
+            metric_config_bounds=metric_config_bounds,
         )

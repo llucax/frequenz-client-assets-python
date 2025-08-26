@@ -75,6 +75,16 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
             "category": component.category.name,
             "manufacturer": component.manufacturer,
             "model_name": component.model_name,
+            "metric_config_bounds": [
+                {
+                    "metric": metric_config_bound.metric.name,
+                    "config_bounds": {
+                        "lower": metric_config_bound.config_bounds.lower,
+                        "upper": metric_config_bound.config_bounds.upper,
+                    },
+                }
+                for metric_config_bound in component.metric_config_bounds
+            ],
         }
 
         # Handle category_specific_info
