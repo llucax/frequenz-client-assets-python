@@ -12,9 +12,10 @@ from __future__ import annotations
 from frequenz.api.assets.v1 import assets_pb2, assets_pb2_grpc
 from frequenz.client.base.client import BaseApiClient, call_stub_method
 
-from frequenz.client.assets.types import ElectricalComponent, Microgrid
-
+from ._microgrid import Microgrid
+from ._microgrid_proto import microgrid_from_proto
 from .exceptions import ClientNotConnected
+from .types import ElectricalComponent
 
 
 class AssetsApiClient(BaseApiClient[assets_pb2_grpc.PlatformAssetsStub]):
@@ -84,7 +85,7 @@ class AssetsApiClient(BaseApiClient[assets_pb2_grpc.PlatformAssetsStub]):
             method_name="GetMicrogrid",
         )
 
-        return Microgrid.from_protobuf(response.microgrid)
+        return microgrid_from_proto(response.microgrid)
 
     async def get_electrical_components(
         self, microgrid_id: int

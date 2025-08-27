@@ -6,52 +6,16 @@ from typing import Any
 
 import asyncclick as click
 
+from frequenz.client.assets._microgrid import Microgrid
+from frequenz.client.assets._microgrid_json import microgrid_to_json
 from frequenz.client.assets.types import (
     Battery,
     ElectricalComponent,
     EvCharger,
     GridConnectionPoint,
     Inverter,
-    Microgrid,
     PowerTransformer,
 )
-
-
-class MicrogridJSONEncoder(json.JSONEncoder):
-    """Custom JSON encoder for Microgrid objects."""
-
-    def default(self, o: Any) -> Any:
-        """Convert Microgrid objects to JSON-serializable format."""
-        if isinstance(o, Microgrid):
-            return self._serialize_microgrid(o)
-        # Let the base class handle other types
-        return super().default(o)
-
-    def _serialize_microgrid(self, microgrid: Microgrid) -> dict[str, Any]:
-        """Serialize a Microgrid to a dictionary."""
-        result = {
-            "id": str(microgrid.id),
-            "enterprise_id": str(microgrid.enterprise_id),
-            "name": microgrid.name,
-            "status": microgrid.status,
-            "create_time": microgrid.create_time.isoformat(),
-        }
-
-        # Handle optional fields
-        if microgrid.delivery_area:
-            result["delivery_area"] = {
-                "code": microgrid.delivery_area.code,
-                "code_type": microgrid.delivery_area.code_type,
-            }
-
-        if microgrid.location:
-            result["location"] = {
-                "latitude": microgrid.location.latitude,
-                "longitude": microgrid.location.longitude,
-                "country_code": microgrid.location.country_code,
-            }
-
-        return result
 
 
 class ElectricalComponentJSONEncoder(json.JSONEncoder):
@@ -138,7 +102,7 @@ def print_microgrid_details(microgrid: Microgrid) -> None:
     Args:
         microgrid: The Microgrid instance to print to console.
     """
-    click.echo(json.dumps(microgrid, cls=MicrogridJSONEncoder, indent=2))
+    click.echo(microgrid_to_json(microgrid))
 
 
 def print_electrical_components(

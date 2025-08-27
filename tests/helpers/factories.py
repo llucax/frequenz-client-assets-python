@@ -10,13 +10,11 @@ from frequenz.client.common.microgrid.electrical_components import (
     ElectricalComponentCategory,
 )
 
+from frequenz.client.assets._delivery_area import DeliveryArea
+from frequenz.client.assets._location import Location
+from frequenz.client.assets._microgrid import Microgrid
 from frequenz.client.assets.enums import BatteryType, Metric
-from frequenz.client.assets.types import (
-    DeliveryArea,
-    ElectricalComponent,
-    Location,
-    Microgrid,
-)
+from frequenz.client.assets.types import ElectricalComponent
 
 from .test_data import MockData
 

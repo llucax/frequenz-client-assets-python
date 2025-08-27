@@ -38,11 +38,9 @@ import json
 import asyncclick as click
 
 from frequenz.client.assets._client import AssetsApiClient
-from frequenz.client.assets.cli.utils import (
-    print_electrical_components,
-    print_microgrid_details,
-)
 from frequenz.client.assets.exceptions import ApiClientError
+
+from ._utils import print_electrical_components, print_microgrid_details
 
 
 @click.group(invoke_without_command=True)

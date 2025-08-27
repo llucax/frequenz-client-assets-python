@@ -3,8 +3,9 @@
 
 """Helper functions for common assertions."""
 
+from frequenz.client.assets._microgrid import Microgrid
 from frequenz.client.assets.enums import BatteryType, Metric
-from frequenz.client.assets.types import Battery, ElectricalComponent, Microgrid
+from frequenz.client.assets.types import Battery, ElectricalComponent
 
 from .test_data import MockData
 
