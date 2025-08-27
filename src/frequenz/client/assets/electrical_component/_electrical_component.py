@@ -2,6 +2,7 @@
 
 import dataclasses
 from dataclasses import dataclass
+from typing import Any, Self
 
 from frequenz.client.common.microgrid import MicrogridId
 from frequenz.client.common.microgrid.electrical_components import ElectricalComponentId
@@ -41,6 +42,22 @@ class ElectricalComponent:
 
     operational_lifetime: Lifetime = dataclasses.field(default_factory=Lifetime)
     """The operational lifetime of the electrical component."""
+
+    def __new__(cls, *_: Any, **__: Any) -> Self:
+        """Prevent instantiation of this class."""
+        if cls is ElectricalComponent:
+            raise TypeError(f"Cannot instantiate {cls.__name__} directly")
+        return super().__new__(cls)
+
+    @property
+    def identity(self) -> tuple[ElectricalComponentId, MicrogridId]:
+        """The identity of this component.
+
+        This uses the electrical component ID and microgrid ID to identify a component
+        without considering the other attributes, so even if a component state
+        changed, the identity remains the same.
+        """
+        return (self.id, self.microgrid_id)
 
     def __str__(self) -> str:
         """Return the ID of this electrical component as a string."""
