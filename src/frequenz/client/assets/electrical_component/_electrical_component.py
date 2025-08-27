@@ -1,0 +1,48 @@
+"""Electrical component types."""
+
+import dataclasses
+from dataclasses import dataclass
+
+from frequenz.client.common.microgrid import MicrogridId
+from frequenz.client.common.microgrid.electrical_components import ElectricalComponentId
+
+from frequenz.client.assets.electrical_component._category import (
+    ElectricalComponentCategory,
+)
+
+from .._lifetime import Lifetime
+
+
+@dataclass(frozen=True, kw_only=True)
+class ElectricalComponent:
+    """A wrapper class for the protobuf ElectricalComponent message.
+
+    An electrical component is a physical device that can be used to generate or consume
+    electricity.
+    """
+
+    id: ElectricalComponentId
+    """Unique identifier for the electrical component."""
+
+    microgrid_id: MicrogridId
+    """Unique identifier for the microgrid that the electrical component belongs to."""
+
+    name: str
+    """Human-readable name for the electrical component."""
+
+    category: ElectricalComponentCategory | int
+    """The component category. E.g., Inverter, Battery, etc."""
+
+    manufacturer: str
+    """The manufacturer of the electrical component."""
+
+    model_name: str
+    """The model name of the electrical component."""
+
+    operational_lifetime: Lifetime = dataclasses.field(default_factory=Lifetime)
+    """The operational lifetime of the electrical component."""
+
+    def __str__(self) -> str:
+        """Return the ID of this electrical component as a string."""
+        name = f":{self.name}" if self.name else ""
+        return f"{self.id}{name}"
