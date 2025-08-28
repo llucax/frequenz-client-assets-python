@@ -1,6 +1,7 @@
 """Electrical component types."""
 
 import dataclasses
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, Self
 
@@ -10,6 +11,8 @@ from frequenz.client.common.microgrid.electrical_components import ElectricalCom
 from frequenz.client.assets.electrical_component._category import (
     ElectricalComponentCategory,
 )
+from frequenz.client.assets.metrics._bounds import Bounds
+from frequenz.client.assets.metrics._metric import Metric
 
 from .._lifetime import Lifetime
 
@@ -42,6 +45,16 @@ class ElectricalComponent:
 
     operational_lifetime: Lifetime = dataclasses.field(default_factory=Lifetime)
     """The operational lifetime of the electrical component."""
+
+    rated_bounds: Mapping[Metric | int, Bounds] = dataclasses.field(
+        default_factory=dict,
+        # dict is not hashable, so we don't use this field to calculate the hash. This
+        # shouldn't be a problem since it is very unlikely that two components with all
+        # other attributes being equal would have different category specific metadata,
+        # so hash collisions should be still very unlikely.
+        hash=False,
+    )
+    """List of rated bounds present for the component identified by Metric."""
 
     def __new__(cls, *_: Any, **__: Any) -> Self:
         """Prevent instantiation of this class."""

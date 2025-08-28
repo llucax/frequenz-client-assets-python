@@ -69,7 +69,7 @@ def electrical_component_proto(
         message: The protobuf message.
 
     Returns:
-        The resulting `Component` instance.
+        The resulting `ElectricalComponent` instance.
     """
     major_issues: list[str] = []
     minor_issues: list[str] = []
