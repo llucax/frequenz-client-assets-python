@@ -80,18 +80,18 @@ def electrical_component_proto(
         minor_issues=minor_issues,
     )
 
-    # if major_issues:
-    #     _logger.warning(
-    #         "Found issues in component: %s | Protobuf message:\n%s",
-    #         ", ".join(major_issues),
-    #         message,
-    #     )
-    # if minor_issues:
-    #     _logger.debug(
-    #         "Found minor issues in component: %s | Protobuf message:\n%s",
-    #         ", ".join(minor_issues),
-    #         message,
-    #     )
+    if major_issues:
+        _logger.warning(
+            "Found issues in component: %s | Protobuf message:\n%s",
+            ", ".join(major_issues),
+            message,
+        )
+    if minor_issues:
+        _logger.debug(
+            "Found minor issues in component: %s | Protobuf message:\n%s",
+            ", ".join(minor_issues),
+            message,
+        )
 
     return component
 
@@ -143,7 +143,6 @@ def component_base_from_proto_with_issues(
         message, major_issues=major_issues, minor_issues=minor_issues
     )
 
-    print(f"message.category: {message.category}")
     category = enum_proto.enum_from_proto(message.category, ElectricalComponentCategory)
     if category is ElectricalComponentCategory.UNSPECIFIED:
         major_issues.append("category is unspecified")
