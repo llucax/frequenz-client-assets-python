@@ -79,18 +79,18 @@ def electrical_component_proto(
         minor_issues=minor_issues,
     )
 
-    if major_issues:
-        _logger.warning(
-            "Found issues in component: %s | Protobuf message:\n%s",
-            ", ".join(major_issues),
-            message,
-        )
-    if minor_issues:
-        _logger.debug(
-            "Found minor issues in component: %s | Protobuf message:\n%s",
-            ", ".join(minor_issues),
-            message,
-        )
+    # if major_issues:
+    #     _logger.warning(
+    #         "Found issues in component: %s | Protobuf message:\n%s",
+    #         ", ".join(major_issues),
+    #         message,
+    #     )
+    # if minor_issues:
+    #     _logger.debug(
+    #         "Found minor issues in component: %s | Protobuf message:\n%s",
+    #         ", ".join(minor_issues),
+    #         message,
+    #     )
 
     return component
 
@@ -121,7 +121,7 @@ def component_base_from_proto_with_issues(
         minor_issues: A list to append minor issues to.
 
     Returns:
-        A `ComponentBaseData` named tuple containing the extracted data.
+        A `ElectricalComponentBaseData` named tuple containing the extracted data.
     """
     component_id = ElectricalComponentId(message.id)
     microgrid_id = MicrogridId(message.microgrid_id)
@@ -339,7 +339,9 @@ def electrical_component_from_proto_with_issues(
                 case unexpected_inverter_type:
                     assert_never(unexpected_inverter_type)
         case ElectricalComponentCategory.GRID:
-            rated_fuse_current = message.category_specific_info.grid.rated_fuse_current
+            rated_fuse_current = (
+                message.category_specific_info.grid_connection_point.rated_fuse_current
+            )
             # No need to check for negatives because the protobuf type is uint32.
             return GridConnectionPoint(
                 id=base_data.component_id,

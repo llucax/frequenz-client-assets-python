@@ -1,10 +1,5 @@
 """Utility functions for the CLI."""
 
-import json
-
-# from dataclasses import asdict
-from typing import Any
-
 import asyncclick as click
 
 from frequenz.client.assets._microgrid import Microgrid
@@ -12,24 +7,9 @@ from frequenz.client.assets._microgrid_json import microgrid_to_json
 from frequenz.client.assets.electrical_component._electrical_component import (
     ElectricalComponent,
 )
-
-
-class ElectricalComponentJSONEncoder(json.JSONEncoder):
-    """Custom JSON encoder for ElectricalComponent objects."""
-
-    def default(self, o: Any) -> Any:
-        """Convert ElectricalComponent objects to JSON-serializable format."""
-        if isinstance(o, ElectricalComponent):
-            return self._serialize_electrical_component(o)
-        # Let the base class handle other types
-        return super().default(o)
-
-    def _serialize_electrical_component(
-        self, component: ElectricalComponent
-    ) -> dict[str, Any]:
-        """Serialize an ElectricalComponent to a dictionary."""
-        # print(asdict(component))
-        return {}
+from frequenz.client.assets.electrical_component._electrical_component_json import (
+    electrical_components_to_json,
+)
 
 
 def print_microgrid_details(microgrid: Microgrid) -> None:
@@ -61,10 +41,4 @@ def print_electrical_components(
     Args:
         electrical_components: The list of ElectricalComponent instances to print to console.
     """
-    click.echo(
-        json.dumps(
-            electrical_components,
-            cls=ElectricalComponentJSONEncoder,
-            indent=2,
-        )
-    )
+    click.echo(electrical_components_to_json(electrical_components))
