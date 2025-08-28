@@ -13,28 +13,6 @@ from frequenz.client.common import enum_proto
 from frequenz.client.common.microgrid import MicrogridId
 from frequenz.client.common.microgrid.electrical_components import ElectricalComponentId
 
-from frequenz.client.assets.electrical_component._chp import Chp
-from frequenz.client.assets.electrical_component._converter import Converter
-from frequenz.client.assets.electrical_component._crypto_miner import CryptoMiner
-from frequenz.client.assets.electrical_component._electrolyzer import Electrolyzer
-from frequenz.client.assets.electrical_component._grid_connection_point import (
-    GridConnectionPoint,
-)
-from frequenz.client.assets.electrical_component._hvac import Hvac
-from frequenz.client.assets.electrical_component._inverter import (
-    BatteryInverter,
-    HybridInverter,
-    InverterType,
-    PvInverter,
-    UnrecognizedInverter,
-    UnspecifiedInverter,
-)
-from frequenz.client.assets.electrical_component._meter import Meter
-from frequenz.client.assets.electrical_component._power_transformer import (
-    PowerTransformer,
-)
-from frequenz.client.assets.electrical_component._precharger import Precharger
-
 from .._lifetime import Lifetime
 from .._lifetime_proto import lifetime_from_proto
 from ._battery import (
@@ -44,7 +22,13 @@ from ._battery import (
     UnrecognizedBattery,
     UnspecifiedBattery,
 )
+from ._breaker import Breaker
+from ._capacitor_bank import CapacitorBank
 from ._category import ElectricalComponentCategory
+from ._chp import Chp
+from ._converter import Converter
+from ._crypto_miner import CryptoMiner
+from ._electrolyzer import Electrolyzer
 from ._ev_charger import (
     AcEvCharger,
     DcEvCharger,
@@ -53,8 +37,25 @@ from ._ev_charger import (
     UnrecognizedEvCharger,
     UnspecifiedEvCharger,
 )
+from ._grid_connection_point import GridConnectionPoint
+from ._hvac import Hvac
+from ._inverter import (
+    BatteryInverter,
+    HybridInverter,
+    InverterType,
+    PvInverter,
+    UnrecognizedInverter,
+    UnspecifiedInverter,
+)
+from ._meter import Meter
+from ._plc import Plc
+from ._power_transformer import PowerTransformer
+from ._precharger import Precharger
 from ._problematic import UnrecognizedComponent, UnspecifiedComponent
+from ._static_transfer_switch import StaticTransferSwitch
 from ._types import ElectricalComponentType
+from ._uninterruptible_power_supply import UninterruptiblePowerSupply
+from ._wind_turbine import WindTurbine
 
 _logger = logging.getLogger(__name__)
 
@@ -142,6 +143,7 @@ def component_base_from_proto_with_issues(
         message, major_issues=major_issues, minor_issues=minor_issues
     )
 
+    print(f"message.category: {message.category}")
     category = enum_proto.enum_from_proto(message.category, ElectricalComponentCategory)
     if category is ElectricalComponentCategory.UNSPECIFIED:
         major_issues.append("category is unspecified")
@@ -199,6 +201,12 @@ def electrical_component_from_proto_with_issues(
             | ElectricalComponentCategory.HVAC
             | ElectricalComponentCategory.METER
             | ElectricalComponentCategory.PRECHARGER
+            | ElectricalComponentCategory.BREAKER
+            | ElectricalComponentCategory.PLC
+            | ElectricalComponentCategory.STATIC_TRANSFER_SWITCH
+            | ElectricalComponentCategory.UNINTERRUPTIBLE_POWER_SUPPLY
+            | ElectricalComponentCategory.CAPACITOR_BANK
+            | ElectricalComponentCategory.WIND_TURBINE
         ):
             return _trivial_category_to_class(base_data.category)(
                 id=base_data.component_id,
@@ -378,6 +386,12 @@ def _trivial_category_to_class(
     | Hvac
     | Meter
     | Precharger
+    | Breaker
+    | Plc
+    | StaticTransferSwitch
+    | UninterruptiblePowerSupply
+    | CapacitorBank
+    | WindTurbine
 ]:
     """Return the class corresponding to a trivial component category."""
     return {
@@ -389,6 +403,12 @@ def _trivial_category_to_class(
         ElectricalComponentCategory.HVAC: Hvac,
         ElectricalComponentCategory.METER: Meter,
         ElectricalComponentCategory.PRECHARGER: Precharger,
+        ElectricalComponentCategory.BREAKER: Breaker,
+        ElectricalComponentCategory.PLC: Plc,
+        ElectricalComponentCategory.STATIC_TRANSFER_SWITCH: StaticTransferSwitch,
+        ElectricalComponentCategory.UNINTERRUPTIBLE_POWER_SUPPLY: UninterruptiblePowerSupply,
+        ElectricalComponentCategory.CAPACITOR_BANK: CapacitorBank,
+        ElectricalComponentCategory.WIND_TURBINE: WindTurbine,
     }[category]
 
 

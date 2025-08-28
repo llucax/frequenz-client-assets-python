@@ -26,6 +26,9 @@ class ElectricalComponentCategory(enum.Enum):
     INVERTER = electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_INVERTER
     """An electricity generator, with batteries or solar energy."""
 
+    BREAKER = electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_BREAKER
+    """A breaker, used to interrupt the flow of electricity."""
+
     CONVERTER = electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_CONVERTER
     """A DC-DC converter."""
 
@@ -62,3 +65,24 @@ class ElectricalComponentCategory(enum.Enum):
         electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_POWER_TRANSFORMER
     )
     """A power transformer."""
+
+    PLC = electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_PLC
+    """An industrial controller or PLC (Programmable Logic Controller)."""
+
+    STATIC_TRANSFER_SWITCH = (
+        electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_STATIC_TRANSFER_SWITCH
+    )
+    """A static transfer switch (STS)."""
+
+    UNINTERRUPTIBLE_POWER_SUPPLY = (
+        electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_UNINTERRUPTIBLE_POWER_SUPPLY
+    )
+    """An uninterruptible power supply (UPS)."""
+
+    CAPACITOR_BANK = (
+        electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_CAPACITOR_BANK
+    )
+    """A capacitor bank for power factor correction."""
+
+    WIND_TURBINE = electrical_components_pb2.ELECTRICAL_COMPONENT_CATEGORY_WIND_TURBINE
+    """A wind turbine."""
