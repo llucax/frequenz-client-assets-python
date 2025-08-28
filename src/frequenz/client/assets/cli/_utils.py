@@ -1,20 +1,16 @@
 """Utility functions for the CLI."""
 
 import json
-from dataclasses import asdict
+
+# from dataclasses import asdict
 from typing import Any
 
 import asyncclick as click
 
 from frequenz.client.assets._microgrid import Microgrid
 from frequenz.client.assets._microgrid_json import microgrid_to_json
-from frequenz.client.assets.types import (
-    Battery,
+from frequenz.client.assets.electrical_component._electrical_component import (
     ElectricalComponent,
-    EvCharger,
-    GridConnectionPoint,
-    Inverter,
-    PowerTransformer,
 )
 
 
@@ -32,62 +28,8 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
         self, component: ElectricalComponent
     ) -> dict[str, Any]:
         """Serialize an ElectricalComponent to a dictionary."""
-        result: dict[str, Any] = {
-            "id": str(component.id),
-            "microgrid_id": str(component.microgrid_id),
-            "name": component.name,
-            "category": component.category.name,
-            "manufacturer": component.manufacturer,
-            "model_name": component.model_name,
-            "metric_config_bounds": [
-                {
-                    "metric": metric_config_bound.metric.name,
-                    "config_bounds": {
-                        "lower": (
-                            metric_config_bound.config_bounds.lower
-                            if metric_config_bound.config_bounds
-                            else None
-                        ),
-                        "upper": (
-                            metric_config_bound.config_bounds.upper
-                            if metric_config_bound.config_bounds
-                            else None
-                        ),
-                    },
-                }
-                for metric_config_bound in component.metric_config_bounds
-            ],
-        }
-
-        # Handle category_specific_info
-        if component.category_specific_info:
-            result["category_specific_info"] = self._serialize_category_specific_info(
-                component.category_specific_info
-            )
-
-        if component.operational_lifetime:
-            result["operational_lifetime"] = {
-                "start_time": component.operational_lifetime.start_time.isoformat(),
-                "end_time": component.operational_lifetime.end_time.isoformat(),
-            }
-
-        return result
-
-    def _serialize_category_specific_info(self, info: Any) -> dict[str, Any]:
-        """Serialize category specific info based on its type."""
-        if isinstance(info, Battery):
-            return {"type": info.type.name}
-        if isinstance(info, EvCharger):
-            return {"type": info.type.name}
-        if isinstance(info, GridConnectionPoint):
-            return {"rated_fuse_current": info.rated_fuse_current}
-        if isinstance(info, Inverter):
-            return {"type": info.type.name}
-        if isinstance(info, PowerTransformer):
-            return {"primary": info.primary, "secondary": info.secondary}
-
-        # Fallback to default serialization
-        return asdict(info)
+        # print(asdict(component))
+        return {}
 
 
 def print_microgrid_details(microgrid: Microgrid) -> None:

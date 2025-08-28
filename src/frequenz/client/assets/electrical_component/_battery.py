@@ -7,14 +7,11 @@ import dataclasses
 import enum
 from typing import Any, Literal, Self, TypeAlias
 
-from frequenz.api.common.v1alpha8.microgrid.electrical_components.electrical_components_pb2 import (
-    BatteryType as PBBatteryType,
+from frequenz.api.common.v1alpha8.microgrid.electrical_components import (
+    electrical_components_pb2,
 )
 
-from frequenz.client.assets.electrical_component._category import (
-    ElectricalComponentCategory,
-)
-
+from ._category import ElectricalComponentCategory
 from ._electrical_component import ElectricalComponent
 
 
@@ -22,13 +19,13 @@ from ._electrical_component import ElectricalComponent
 class BatteryType(enum.Enum):
     """The known types of batteries."""
 
-    UNSPECIFIED = PBBatteryType.BATTERY_TYPE_UNSPECIFIED
+    UNSPECIFIED = electrical_components_pb2.BATTERY_TYPE_UNSPECIFIED
     """The battery type is unspecified."""
 
-    LI_ION = PBBatteryType.BATTERY_TYPE_LI_ION
+    LI_ION = electrical_components_pb2.BATTERY_TYPE_LI_ION
     """Lithium-ion (Li-ion) battery."""
 
-    NA_ION = PBBatteryType.BATTERY_TYPE_NA_ION
+    NA_ION = electrical_components_pb2.BATTERY_TYPE_NA_ION
     """Sodium-ion (Na-ion) battery."""
 
 

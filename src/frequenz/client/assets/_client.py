@@ -12,10 +12,14 @@ from __future__ import annotations
 from frequenz.api.assets.v1 import assets_pb2, assets_pb2_grpc
 from frequenz.client.base.client import BaseApiClient, call_stub_method
 
+from frequenz.client.assets.electrical_component._electrical_component import (
+    ElectricalComponent,
+)
+
 from ._microgrid import Microgrid
 from ._microgrid_proto import microgrid_from_proto
+from .electrical_component._electrical_component_proto import electrical_component_proto
 from .exceptions import ClientNotConnected
-from .types import ElectricalComponent
 
 
 class AssetsApiClient(BaseApiClient[assets_pb2_grpc.PlatformAssetsStub]):
@@ -78,14 +82,15 @@ class AssetsApiClient(BaseApiClient[assets_pb2_grpc.PlatformAssetsStub]):
             ApiClientError: If there are any errors communicating with the Assets API,
                 most likely a subclass of [GrpcError][frequenz.client.base.exception.GrpcError].
         """
-        request = assets_pb2.GetMicrogridRequest(microgrid_id=microgrid_id)
-        response = await call_stub_method(
+        microgrid = await call_stub_method(
             self,
-            lambda: self.stub.GetMicrogrid(request),
+            lambda: self.stub.GetMicrogrid(
+                assets_pb2.GetMicrogridRequest(microgrid_id=microgrid_id)
+            ),
             method_name="GetMicrogrid",
         )
 
-        return microgrid_from_proto(response.microgrid)
+        return microgrid_from_proto(microgrid.microgrid)
 
     async def get_electrical_components(
         self, microgrid_id: int
@@ -99,16 +104,17 @@ class AssetsApiClient(BaseApiClient[assets_pb2_grpc.PlatformAssetsStub]):
         Returns:
             The electrical components of the microgrid.
         """
-        request = assets_pb2.ListMicrogridElectricalComponentsRequest(
-            microgrid_id=microgrid_id,
-        )
-        response = await call_stub_method(
+        electrical_component_list = await call_stub_method(
             self,
-            lambda: self.stub.ListMicrogridElectricalComponents(request),
+            lambda: self.stub.ListMicrogridElectricalComponents(
+                assets_pb2.ListMicrogridElectricalComponentsRequest(
+                    microgrid_id=microgrid_id,
+                )
+            ),
             method_name="ListMicrogridElectricalComponents",
         )
 
         return [
-            ElectricalComponent.from_protobuf(component)
-            for component in response.components
+            electrical_component_proto(component)
+            for component in electrical_component_list.components
         ]
