@@ -17,6 +17,7 @@ from frequenz.client.common.microgrid.electrical_components import ElectricalCom
 from .._lifetime import Lifetime
 from .._lifetime_proto import lifetime_from_proto
 from ..metrics._bounds import Bounds
+from ..metrics._bounds_proto import bounds_from_proto
 from ..metrics._metric import Metric
 from ._battery import (
     BatteryType,
@@ -109,7 +110,7 @@ class ElectricalComponentBaseData(NamedTuple):
     model_name: str | None
     category: ElectricalComponentCategory | int
     lifetime: Lifetime
-    rate_bounds: dict[Metric | int, Bounds]
+    rated_bounds: dict[Metric | int, Bounds]
 
 
 def component_base_from_proto_with_issues(
@@ -147,7 +148,7 @@ def component_base_from_proto_with_issues(
         message, major_issues=major_issues, minor_issues=minor_issues
     )
 
-    rate_bounds = _metric_config_bounds_from_proto(
+    rated_bounds = _metric_config_bounds_from_proto(
         message.metric_config_bounds,
         major_issues=major_issues,
         minor_issues=minor_issues,
@@ -167,7 +168,7 @@ def component_base_from_proto_with_issues(
         model_name,
         category,
         lifetime,
-        rate_bounds,
+        rated_bounds,
     )
 
 
@@ -201,7 +202,7 @@ def electrical_component_from_proto_with_issues(
                 model_name=base_data.model_name,
                 category=base_data.category,
                 operational_lifetime=base_data.lifetime,
-                rate_bounds=base_data.rate_bounds,
+                rated_bounds=base_data.rated_bounds,
             )
         case (
             ElectricalComponentCategory.UNSPECIFIED
@@ -226,7 +227,7 @@ def electrical_component_from_proto_with_issues(
                 manufacturer=base_data.manufacturer,
                 model_name=base_data.model_name,
                 operational_lifetime=base_data.lifetime,
-                rate_bounds=base_data.rate_bounds,
+                rated_bounds=base_data.rated_bounds,
             )
         case ElectricalComponentCategory.BATTERY:
             battery_enum_to_class: dict[
@@ -250,7 +251,7 @@ def electrical_component_from_proto_with_issues(
                         manufacturer=base_data.manufacturer,
                         model_name=base_data.model_name,
                         operational_lifetime=base_data.lifetime,
-                        rate_bounds=base_data.rate_bounds,
+                        rated_bounds=base_data.rated_bounds,
                     )
                 case int():
                     major_issues.append(f"battery type {battery_type} is unrecognized")
@@ -262,7 +263,7 @@ def electrical_component_from_proto_with_issues(
                         model_name=base_data.model_name,
                         operational_lifetime=base_data.lifetime,
                         type=battery_type,
-                        rate_bounds=base_data.rate_bounds,
+                        rated_bounds=base_data.rated_bounds,
                     )
                 case unexpected_battery_type:
                     assert_never(unexpected_battery_type)
@@ -297,7 +298,7 @@ def electrical_component_from_proto_with_issues(
                         manufacturer=base_data.manufacturer,
                         model_name=base_data.model_name,
                         operational_lifetime=base_data.lifetime,
-                        rate_bounds=base_data.rate_bounds,
+                        rated_bounds=base_data.rated_bounds,
                     )
                 case int():
                     major_issues.append(
@@ -311,7 +312,7 @@ def electrical_component_from_proto_with_issues(
                         model_name=base_data.model_name,
                         operational_lifetime=base_data.lifetime,
                         type=ev_charger_type,
-                        rate_bounds=base_data.rate_bounds,
+                        rated_bounds=base_data.rated_bounds,
                     )
                 case unexpected_ev_charger_type:
                     assert_never(unexpected_ev_charger_type)
@@ -346,7 +347,7 @@ def electrical_component_from_proto_with_issues(
                         manufacturer=base_data.manufacturer,
                         model_name=base_data.model_name,
                         operational_lifetime=base_data.lifetime,
-                        rate_bounds=base_data.rate_bounds,
+                        rated_bounds=base_data.rated_bounds,
                     )
                 case int():
                     major_issues.append(
@@ -359,8 +360,8 @@ def electrical_component_from_proto_with_issues(
                         manufacturer=base_data.manufacturer,
                         model_name=base_data.model_name,
                         operational_lifetime=base_data.lifetime,
+                        rated_bounds=base_data.rated_bounds,
                         type=inverter_type,
-                        rate_bounds=base_data.rate_bounds,
                     )
                 case unexpected_inverter_type:
                     assert_never(unexpected_inverter_type)
@@ -376,8 +377,8 @@ def electrical_component_from_proto_with_issues(
                 manufacturer=base_data.manufacturer,
                 model_name=base_data.model_name,
                 operational_lifetime=base_data.lifetime,
+                rated_bounds=base_data.rated_bounds,
                 rated_fuse_current=rated_fuse_current,
-                rate_bounds=base_data.rate_bounds,
             )
         case ElectricalComponentCategory.POWER_TRANSFORMER:
             return PowerTransformer(
@@ -387,9 +388,9 @@ def electrical_component_from_proto_with_issues(
                 manufacturer=base_data.manufacturer,
                 model_name=base_data.model_name,
                 operational_lifetime=base_data.lifetime,
+                rated_bounds=base_data.rated_bounds,
                 primary_power=message.category_specific_info.power_transformer.primary,
                 secondary_power=message.category_specific_info.power_transformer.secondary,
-                rate_bounds=base_data.rate_bounds,
             )
         case unexpected_category:
             assert_never(unexpected_category)
@@ -467,7 +468,7 @@ def _metric_config_bounds_from_proto(
             continue
 
         try:
-            bound = enum_proto.enum_from_proto(metric_bound.config_bounds, Bounds)
+            bound = bounds_from_proto(metric_bound.config_bounds)
         except ValueError as exc:
             major_issues.append(
                 f"metric_config_bounds for {metric} is invalid ({exc}), considering "

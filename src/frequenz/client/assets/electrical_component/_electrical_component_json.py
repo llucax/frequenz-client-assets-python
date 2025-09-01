@@ -6,7 +6,7 @@
 import enum
 import json
 from dataclasses import asdict
-from typing import Any, assert_never
+from typing import Any
 
 from .._lifetime import Lifetime
 from ._electrical_component import ElectricalComponent
@@ -41,22 +41,25 @@ class ElectricalComponentJSONEncoder(json.JSONEncoder):
             component.operational_lifetime
         )
 
-        match component.category:
-            case int():
-                data["category"] = component.category
-            case enum.Enum() as e:
-                data["category"] = e.name
-            case unexpected_category:
-                assert_never(unexpected_category)
+        if "rated_bounds" in data and data["rated_bounds"]:
+            data["rated_bounds"] = {
+                key.name if isinstance(key, enum.Enum) else str(key): value
+                for key, value in data["rated_bounds"].items()
+            }
 
-        if component_type := getattr(component, "type", None):
-            match component_type:
-                case int():
-                    data["type"] = component_type
-                case enum.Enum() as e:
-                    data["type"] = e.name
-                case unexpected_type:
-                    assert_never(unexpected_type)
+        if "category" in data and data["category"]:
+            data["category"] = (
+                data["category"].name
+                if isinstance(data["category"], enum.Enum)
+                else data["category"]
+            )
+
+        if "type" in data and data["type"]:
+            data["type"] = (
+                data["type"].name
+                if isinstance(data["type"], enum.Enum)
+                else data["type"]
+            )
 
         return data
 

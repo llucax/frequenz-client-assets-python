@@ -73,40 +73,40 @@ class Metric(enum.Enum):
     AC_CURRENT_PHASE_3 = metrics_pb2.METRIC_AC_CURRENT_PHASE_3
     """The alternating current current in phase 3."""
 
-    AC_APPARENT_POWER = metrics_pb2.METRIC_AC_APPARENT_POWER
+    AC_POWER_APPARENT = metrics_pb2.METRIC_AC_POWER_APPARENT
     """The alternating current apparent power."""
 
-    AC_APPARENT_POWER_PHASE_1 = metrics_pb2.METRIC_AC_APPARENT_POWER_PHASE_1
+    AC_POWER_APPARENT_PHASE_1 = metrics_pb2.METRIC_AC_POWER_APPARENT_PHASE_1
     """The alternating current apparent power in phase 1."""
 
-    AC_APPARENT_POWER_PHASE_2 = metrics_pb2.METRIC_AC_APPARENT_POWER_PHASE_2
+    AC_POWER_APPARENT_PHASE_2 = metrics_pb2.METRIC_AC_POWER_APPARENT_PHASE_2
     """The alternating current apparent power in phase 2."""
 
-    AC_APPARENT_POWER_PHASE_3 = metrics_pb2.METRIC_AC_APPARENT_POWER_PHASE_3
+    AC_POWER_APPARENT_PHASE_3 = metrics_pb2.METRIC_AC_POWER_APPARENT_PHASE_3
     """The alternating current apparent power in phase 3."""
 
-    AC_ACTIVE_POWER = metrics_pb2.METRIC_AC_ACTIVE_POWER
+    AC_POWER_ACTIVE = metrics_pb2.METRIC_AC_POWER_ACTIVE
     """The alternating current active power."""
 
-    AC_ACTIVE_POWER_PHASE_1 = metrics_pb2.METRIC_AC_ACTIVE_POWER_PHASE_1
+    AC_POWER_ACTIVE_PHASE_1 = metrics_pb2.METRIC_AC_POWER_ACTIVE_PHASE_1
     """The alternating current active power in phase 1."""
 
-    AC_ACTIVE_POWER_PHASE_2 = metrics_pb2.METRIC_AC_ACTIVE_POWER_PHASE_2
+    AC_POWER_ACTIVE_PHASE_2 = metrics_pb2.METRIC_AC_POWER_ACTIVE_PHASE_2
     """The alternating current active power in phase 2."""
 
-    AC_ACTIVE_POWER_PHASE_3 = metrics_pb2.METRIC_AC_ACTIVE_POWER_PHASE_3
+    AC_POWER_ACTIVE_PHASE_3 = metrics_pb2.METRIC_AC_POWER_ACTIVE_PHASE_3
     """The alternating current active power in phase 3."""
 
-    AC_REACTIVE_POWER = metrics_pb2.METRIC_AC_REACTIVE_POWER
+    AC_POWER_REACTIVE = metrics_pb2.METRIC_AC_POWER_REACTIVE
     """The alternating current reactive power."""
 
-    AC_REACTIVE_POWER_PHASE_1 = metrics_pb2.METRIC_AC_REACTIVE_POWER_PHASE_1
+    AC_POWER_REACTIVE_PHASE_1 = metrics_pb2.METRIC_AC_POWER_REACTIVE_PHASE_1
     """The alternating current reactive power in phase 1."""
 
-    AC_REACTIVE_POWER_PHASE_2 = metrics_pb2.METRIC_AC_REACTIVE_POWER_PHASE_2
+    AC_POWER_REACTIVE_PHASE_2 = metrics_pb2.METRIC_AC_POWER_REACTIVE_PHASE_2
     """The alternating current reactive power in phase 2."""
 
-    AC_REACTIVE_POWER_PHASE_3 = metrics_pb2.METRIC_AC_REACTIVE_POWER_PHASE_3
+    AC_POWER_REACTIVE_PHASE_3 = metrics_pb2.METRIC_AC_POWER_REACTIVE_PHASE_3
     """The alternating current reactive power in phase 3."""
 
     AC_POWER_FACTOR = metrics_pb2.METRIC_AC_POWER_FACTOR
@@ -121,76 +121,76 @@ class Metric(enum.Enum):
     AC_POWER_FACTOR_PHASE_3 = metrics_pb2.METRIC_AC_POWER_FACTOR_PHASE_3
     """The alternating current power factor in phase 3."""
 
-    AC_APPARENT_ENERGY = metrics_pb2.METRIC_AC_APPARENT_ENERGY
+    AC_ENERGY_APPARENT = metrics_pb2.METRIC_AC_ENERGY_APPARENT
     """The alternating current apparent energy."""
 
-    AC_APPARENT_ENERGY_PHASE_1 = metrics_pb2.METRIC_AC_APPARENT_ENERGY_PHASE_1
+    AC_ENERGY_APPARENT_PHASE_1 = metrics_pb2.METRIC_AC_ENERGY_APPARENT_PHASE_1
     """The alternating current apparent energy in phase 1."""
 
-    AC_APPARENT_ENERGY_PHASE_2 = metrics_pb2.METRIC_AC_APPARENT_ENERGY_PHASE_2
+    AC_ENERGY_APPARENT_PHASE_2 = metrics_pb2.METRIC_AC_ENERGY_APPARENT_PHASE_2
     """The alternating current apparent energy in phase 2."""
 
-    AC_APPARENT_ENERGY_PHASE_3 = metrics_pb2.METRIC_AC_APPARENT_ENERGY_PHASE_3
+    AC_ENERGY_APPARENT_PHASE_3 = metrics_pb2.METRIC_AC_ENERGY_APPARENT_PHASE_3
     """The alternating current apparent energy in phase 3."""
 
-    AC_ACTIVE_ENERGY = metrics_pb2.METRIC_AC_ACTIVE_ENERGY
+    AC_ENERGY_ACTIVE = metrics_pb2.METRIC_AC_ENERGY_ACTIVE
     """The alternating current active energy."""
 
-    AC_ACTIVE_ENERGY_PHASE_1 = metrics_pb2.METRIC_AC_ACTIVE_ENERGY_PHASE_1
+    AC_ENERGY_ACTIVE_PHASE_1 = metrics_pb2.METRIC_AC_ENERGY_ACTIVE_PHASE_1
     """The alternating current active energy in phase 1."""
 
-    AC_ACTIVE_ENERGY_PHASE_2 = metrics_pb2.METRIC_AC_ACTIVE_ENERGY_PHASE_2
+    AC_ENERGY_ACTIVE_PHASE_2 = metrics_pb2.METRIC_AC_ENERGY_ACTIVE_PHASE_2
     """The alternating current active energy in phase 2."""
 
-    AC_ACTIVE_ENERGY_PHASE_3 = metrics_pb2.METRIC_AC_ACTIVE_ENERGY_PHASE_3
+    AC_ENERGY_ACTIVE_PHASE_3 = metrics_pb2.METRIC_AC_ENERGY_ACTIVE_PHASE_3
     """The alternating current active energy in phase 3."""
 
-    AC_ACTIVE_ENERGY_CONSUMED = metrics_pb2.METRIC_AC_ACTIVE_ENERGY_CONSUMED
+    AC_ENERGY_ACTIVE_CONSUMED = metrics_pb2.METRIC_AC_ENERGY_ACTIVE_CONSUMED
     """The alternating current active energy consumed."""
 
-    AC_ACTIVE_ENERGY_CONSUMED_PHASE_1 = (
-        metrics_pb2.METRIC_AC_ACTIVE_ENERGY_CONSUMED_PHASE_1
+    AC_ENERGY_ACTIVE_CONSUMED_PHASE_1 = (
+        metrics_pb2.METRIC_AC_ENERGY_ACTIVE_CONSUMED_PHASE_1
     )
     """The alternating current active energy consumed in phase 1."""
 
-    AC_ACTIVE_ENERGY_CONSUMED_PHASE_2 = (
-        metrics_pb2.METRIC_AC_ACTIVE_ENERGY_CONSUMED_PHASE_2
+    AC_ENERGY_ACTIVE_CONSUMED_PHASE_2 = (
+        metrics_pb2.METRIC_AC_ENERGY_ACTIVE_CONSUMED_PHASE_2
     )
     """The alternating current active energy consumed in phase 2."""
 
-    AC_ACTIVE_ENERGY_CONSUMED_PHASE_3 = (
-        metrics_pb2.METRIC_AC_ACTIVE_ENERGY_CONSUMED_PHASE_3
+    AC_ENERGY_ACTIVE_CONSUMED_PHASE_3 = (
+        metrics_pb2.METRIC_AC_ENERGY_ACTIVE_CONSUMED_PHASE_3
     )
     """The alternating current active energy consumed in phase 3."""
 
-    AC_ACTIVE_ENERGY_DELIVERED = metrics_pb2.METRIC_AC_ACTIVE_ENERGY_DELIVERED
+    AC_ENERGY_ACTIVE_DELIVERED = metrics_pb2.METRIC_AC_ENERGY_ACTIVE_DELIVERED
     """The alternating current active energy delivered."""
 
-    AC_ACTIVE_ENERGY_DELIVERED_PHASE_1 = (
-        metrics_pb2.METRIC_AC_ACTIVE_ENERGY_DELIVERED_PHASE_1
+    AC_ENERGY_ACTIVE_DELIVERED_PHASE_1 = (
+        metrics_pb2.METRIC_AC_ENERGY_ACTIVE_DELIVERED_PHASE_1
     )
     """The alternating current active energy delivered in phase 1."""
 
-    AC_ACTIVE_ENERGY_DELIVERED_PHASE_2 = (
-        metrics_pb2.METRIC_AC_ACTIVE_ENERGY_DELIVERED_PHASE_2
+    AC_ENERGY_ACTIVE_DELIVERED_PHASE_2 = (
+        metrics_pb2.METRIC_AC_ENERGY_ACTIVE_DELIVERED_PHASE_2
     )
     """The alternating current active energy delivered in phase 2."""
 
-    AC_ACTIVE_ENERGY_DELIVERED_PHASE_3 = (
-        metrics_pb2.METRIC_AC_ACTIVE_ENERGY_DELIVERED_PHASE_3
+    AC_ENERGY_ACTIVE_DELIVERED_PHASE_3 = (
+        metrics_pb2.METRIC_AC_ENERGY_ACTIVE_DELIVERED_PHASE_3
     )
     """The alternating current active energy delivered in phase 3."""
 
-    AC_REACTIVE_ENERGY = metrics_pb2.METRIC_AC_REACTIVE_ENERGY
+    AC_ENERGY_REACTIVE = metrics_pb2.METRIC_AC_ENERGY_REACTIVE
     """The alternating current reactive energy."""
 
-    AC_REACTIVE_ENERGY_PHASE_1 = metrics_pb2.METRIC_AC_REACTIVE_ENERGY_PHASE_1
+    AC_ENERGY_REACTIVE_PHASE_1 = metrics_pb2.METRIC_AC_ENERGY_REACTIVE_PHASE_1
     """The alternating current reactive energy in phase 1."""
 
-    AC_REACTIVE_ENERGY_PHASE_2 = metrics_pb2.METRIC_AC_REACTIVE_ENERGY_PHASE_2
+    AC_ENERGY_REACTIVE_PHASE_2 = metrics_pb2.METRIC_AC_ENERGY_REACTIVE_PHASE_2
     """The alternating current reactive energy in phase 2."""
 
-    AC_REACTIVE_ENERGY_PHASE_3 = metrics_pb2.METRIC_AC_REACTIVE_ENERGY_PHASE_3
+    AC_ENERGY_REACTIVE_PHASE_3 = metrics_pb2.METRIC_AC_ENERGY_REACTIVE_PHASE_3
     """The alternating current reactive energy in phase 3."""
 
     AC_TOTAL_HARMONIC_DISTORTION_CURRENT = (
