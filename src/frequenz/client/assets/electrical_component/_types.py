@@ -68,5 +68,6 @@ ElectricalComponentType: TypeAlias = (
     | PowerTransformer
     | EvChargerTypes
     | GridConnectionPoint
+    | ProblematicComponentTypes
 )
 """The type of the electrical component."""

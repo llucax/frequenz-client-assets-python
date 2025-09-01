@@ -105,9 +105,9 @@ class ElectricalComponentBaseData(NamedTuple):
 
     component_id: ElectricalComponentId
     microgrid_id: MicrogridId
-    name: str | None
-    manufacturer: str | None
-    model_name: str | None
+    name: str
+    manufacturer: str
+    model_name: str
     category: ElectricalComponentCategory | int
     lifetime: Lifetime
     rated_bounds: dict[Metric | int, Bounds]
@@ -132,16 +132,16 @@ def component_base_from_proto_with_issues(
     component_id = ElectricalComponentId(message.id)
     microgrid_id = MicrogridId(message.microgrid_id)
 
-    name = message.name or None
-    if name is None:
+    name = message.name
+    if not name:
         minor_issues.append("name is empty")
 
-    manufacturer = message.manufacturer or None
-    if manufacturer is None:
+    manufacturer = message.manufacturer
+    if not manufacturer:
         minor_issues.append("manufacturer is empty")
 
-    model_name = message.model_name or None
-    if model_name is None:
+    model_name = message.model_name
+    if not model_name:
         minor_issues.append("model_name is empty")
 
     lifetime = _get_operational_lifetime_from_proto(
