@@ -18,7 +18,7 @@ from .._lifetime import Lifetime
 
 
 @dataclass(frozen=True, kw_only=True)
-class ElectricalComponent:
+class ElectricalComponent:  # pylint: disable=too-many-instance-attributes
     """A wrapper class for the protobuf ElectricalComponent message.
 
     An electrical component is a physical device that can be used to generate or consume
