@@ -48,10 +48,9 @@ class AssetsJSONEncoder(json.JSONEncoder):
                 key.value if hasattr(key, "value") else key: self._encode(value)
                 for key, value in o.items()
             }
-        elif isinstance(o, (list, tuple)):
+        if isinstance(o, (list, tuple)):
             return [self._encode(item) for item in o]
-        else:
-            return o
+        return o
 
     def encode(self, o: Any) -> str:
         """Encode the given object to a JSON string, handling enum keys."""
