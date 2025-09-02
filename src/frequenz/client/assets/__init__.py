@@ -4,5 +4,10 @@
 """Assets API client."""
 
 from ._client import AssetsApiClient
+from ._microgrid import Microgrid, MicrogridStatus
 
-__all__ = ["AssetsApiClient"]
+__all__ = [
+    "AssetsApiClient",
+    "Microgrid",
+    "MicrogridStatus",
+]
