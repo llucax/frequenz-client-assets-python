@@ -10,16 +10,18 @@ from unittest.mock import AsyncMock
 from frequenz.api.assets.v1 import assets_pb2
 from frequenz.api.common.v1alpha8.microgrid import microgrid_pb2
 from frequenz.client.common.microgrid import EnterpriseId, MicrogridId
-from google.protobuf.empty_pb2 import Empty
 
 from frequenz.client.assets import Microgrid, MicrogridStatus
 
 
 def assert_stub_method_call(stub_method: AsyncMock) -> None:
     """Assert that the gRPC request matches the expected request."""
-    stub_method.assert_called_once_with(Empty(), timeout=60.0)
+    stub_method.assert_called_once_with(
+        assets_pb2.GetMicrogridRequest(microgrid_id=1), timeout=60.0
+    )
 
 
+client_args = (1,)
 create_timestamp = datetime(2023, 1, 1, tzinfo=timezone.utc)
 grpc_response = assets_pb2.GetMicrogridResponse(microgrid=microgrid_pb2.Microgrid())
 
