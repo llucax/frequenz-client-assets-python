@@ -31,16 +31,16 @@ class ElectricalComponent:  # pylint: disable=too-many-instance-attributes
     microgrid_id: MicrogridId
     """Unique identifier for the microgrid that the electrical component belongs to."""
 
-    name: str
+    name: str | None = None
     """Human-readable name for the electrical component."""
 
     category: ElectricalComponentCategory | int
     """The component category. E.g., Inverter, Battery, etc."""
 
-    manufacturer: str
+    manufacturer: str | None = None
     """The manufacturer of the electrical component."""
 
-    model_name: str
+    model_name: str | None = None
     """The model name of the electrical component."""
 
     operational_lifetime: Lifetime = dataclasses.field(default_factory=Lifetime)
