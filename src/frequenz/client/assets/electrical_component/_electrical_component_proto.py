@@ -329,7 +329,7 @@ def electrical_component_from_proto_with_issues(
                 InverterType.HYBRID: HybridInverter,
             }
             inverter_type = enum_proto.enum_from_proto(
-                message.category_type.inverter.type, InverterType
+                message.category_specific_info.inverter.type, InverterType
             )
             match inverter_type:
                 case (
