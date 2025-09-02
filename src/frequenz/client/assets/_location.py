@@ -4,10 +4,7 @@
 """Location information for a microgrid."""
 
 
-import logging
 from dataclasses import dataclass
-
-_logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, kw_only=True)
