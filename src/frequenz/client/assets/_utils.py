@@ -15,8 +15,9 @@ class AssetsJSONEncoder(json.JSONEncoder):
     """Custom JSON encoder for assets-related objects.
 
     Uses encode() method to pre-process objects and handle:
-    - Dictionary keys that are enums → converts to enum values
-    - List/tuple items → recursively processes nested structures
+    - Dictionary keys that are enums → converts to enum values (recursively processed)
+    - List/tuple/set/frozenset items → recursively processes nested structures
+    - Sets/frozensets are converted to lists for JSON compatibility
 
     Uses default() method to handle individual objects:
     - BaseId objects → integers
@@ -45,11 +46,16 @@ class AssetsJSONEncoder(json.JSONEncoder):
         """Recursively process objects to convert enum keys to their values."""
         if isinstance(o, dict):
             return {
-                key.value if hasattr(key, "value") else key: self._encode(value)
+                (
+                    self._encode(key.value)
+                    if isinstance(key, enum.Enum)
+                    else self._encode(key)
+                ): self._encode(value)
                 for key, value in o.items()
             }
-        if isinstance(o, (list, tuple)):
-            return [self._encode(item) for item in o]
+        if isinstance(o, (list, tuple, set, frozenset)):
+            items = [self._encode(item) for item in o]
+            return items if isinstance(o, (list, tuple)) else items
         return o
 
     def encode(self, o: Any) -> str:
