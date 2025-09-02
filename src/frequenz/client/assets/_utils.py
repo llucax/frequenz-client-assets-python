@@ -14,7 +14,11 @@ from frequenz.core.id import BaseId
 class AssetsJSONEncoder(json.JSONEncoder):
     """Custom JSON encoder for assets-related objects.
 
-    Handles common types used in the assets package:
+    Uses encode() method to pre-process objects and handle:
+    - Dictionary keys that are enums → converts to enum values
+    - List/tuple items → recursively processes nested structures
+
+    Uses default() method to handle individual objects:
     - BaseId objects → integers
     - Enum objects → their values
     - Datetime objects → UTC ISO format strings
@@ -36,3 +40,19 @@ class AssetsJSONEncoder(json.JSONEncoder):
             return o.isoformat()
 
         return super().default(o)
+
+    def _encode(self, o: Any) -> Any:
+        """Recursively process objects to convert enum keys to their values."""
+        if isinstance(o, dict):
+            return {
+                key.value if hasattr(key, "value") else key: self._encode(value)
+                for key, value in o.items()
+            }
+        elif isinstance(o, (list, tuple)):
+            return [self._encode(item) for item in o]
+        else:
+            return o
+
+    def encode(self, o: Any) -> str:
+        """Encode the given object to a JSON string, handling enum keys."""
+        return super().encode(self._encode(o))
