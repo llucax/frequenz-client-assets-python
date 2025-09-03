@@ -47,7 +47,7 @@ class EvCharger(ElectricalComponent):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about a new category yet (i.e. for use with
-        [`UnrecognizedComponent`][frequenz.client.microgrid.component.UnrecognizedComponent])
+        [`UnrecognizedComponent`][frequenz.client.assets.electrical_component.UnrecognizedComponent])
         and in case some low level code needs to know the category of a component.
     """
 
@@ -60,7 +60,7 @@ class EvCharger(ElectricalComponent):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new EV charger type yet (i.e. for use with
-        [`UnrecognizedEvCharger`][frequenz.client.microgrid.component.UnrecognizedEvCharger]).
+        [`UnrecognizedEvCharger`][frequenz.client.assets.electrical_component.UnrecognizedEvCharger]).
     """
 
     # pylint: disable-next=unused-argument
@@ -84,7 +84,7 @@ class UnspecifiedEvCharger(EvCharger):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new EV charger type yet (i.e. for use with
-        [`UnrecognizedEvCharger`][frequenz.client.microgrid.component.UnrecognizedEvCharger]).
+        [`UnrecognizedEvCharger`][frequenz.client.assets.electrical_component.UnrecognizedEvCharger]).
     """
 
 
@@ -101,7 +101,7 @@ class AcEvCharger(EvCharger):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new EV charger type yet (i.e. for use with
-        [`UnrecognizedEvCharger`][frequenz.client.microgrid.component.UnrecognizedEvCharger]).
+        [`UnrecognizedEvCharger`][frequenz.client.assets.electrical_component.UnrecognizedEvCharger]).
     """
 
 
@@ -118,7 +118,7 @@ class DcEvCharger(EvCharger):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new EV charger type yet (i.e. for use with
-        [`UnrecognizedEvCharger`][frequenz.client.microgrid.component.UnrecognizedEvCharger]).
+        [`UnrecognizedEvCharger`][frequenz.client.assets.electrical_component.UnrecognizedEvCharger]).
     """
 
 
@@ -135,7 +135,7 @@ class HybridEvCharger(EvCharger):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new EV charger type yet (i.e. for use with
-        [`UnrecognizedEvCharger`][frequenz.client.microgrid.component.UnrecognizedEvCharger]).
+        [`UnrecognizedEvCharger`][frequenz.client.assets.electrical_component.UnrecognizedEvCharger]).
     """
 
 

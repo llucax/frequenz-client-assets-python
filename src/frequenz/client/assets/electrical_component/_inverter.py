@@ -47,7 +47,7 @@ class Inverter(ElectricalComponent):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about a new category yet (i.e. for use with
-        [`UnrecognizedComponent`][frequenz.client.microgrid.component.UnrecognizedComponent])
+        [`UnrecognizedComponent`][frequenz.client.assets.electrical_component.UnrecognizedComponent])
         and in case some low level code needs to know the category of a component.
     """
 
@@ -60,7 +60,7 @@ class Inverter(ElectricalComponent):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new inverter type yet (i.e. for use with
-        [`UnrecognizedInverter`][frequenz.client.microgrid.component.UnrecognizedInverter]).
+        [`UnrecognizedInverter`][frequenz.client.assets.electrical_component.UnrecognizedInverter]).
     """
 
     # pylint: disable-next=unused-argument
@@ -84,7 +84,7 @@ class UnspecifiedInverter(Inverter):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new inverter type yet (i.e. for use with
-        [`UnrecognizedInverter`][frequenz.client.microgrid.component.UnrecognizedInverter]).
+        [`UnrecognizedInverter`][frequenz.client.assets.electrical_component.UnrecognizedInverter]).
     """
 
 
@@ -101,7 +101,7 @@ class BatteryInverter(Inverter):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new inverter type yet (i.e. for use with
-        [`UnrecognizedInverter`][frequenz.client.microgrid.component.UnrecognizedInverter]).
+        [`UnrecognizedInverter`][frequenz.client.assets.electrical_component.UnrecognizedInverter]).
     """
 
 
@@ -118,7 +118,7 @@ class PvInverter(Inverter):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new inverter type yet (i.e. for use with
-        [`UnrecognizedInverter`][frequenz.client.microgrid.component.UnrecognizedInverter]).
+        [`UnrecognizedInverter`][frequenz.client.assets.electrical_component.UnrecognizedInverter]).
     """
 
 
@@ -135,7 +135,7 @@ class HybridInverter(Inverter):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new inverter type yet (i.e. for use with
-        [`UnrecognizedInverter`][frequenz.client.microgrid.component.UnrecognizedInverter]).
+        [`UnrecognizedInverter`][frequenz.client.assets.electrical_component.UnrecognizedInverter]).
     """
 
 

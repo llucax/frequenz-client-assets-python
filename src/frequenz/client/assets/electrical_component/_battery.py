@@ -44,7 +44,7 @@ class Battery(ElectricalComponent):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about a new category yet (i.e. for use with
-        [`UnrecognizedComponent`][frequenz.client.microgrid.component.UnrecognizedComponent])
+        [`UnrecognizedComponent`][frequenz.client.assets.electrical_component.UnrecognizedComponent])
         and in case some low level code needs to know the category of a component.
     """
 
@@ -57,7 +57,7 @@ class Battery(ElectricalComponent):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new battery type yet (i.e. for use with
-        [`UnrecognizedBattery`][frequenz.client.microgrid.component.UnrecognizedBattery]).
+        [`UnrecognizedBattery`][frequenz.client.assets.electrical_component.UnrecognizedBattery]).
     """
 
     # pylint: disable-next=unused-argument
@@ -81,7 +81,7 @@ class UnspecifiedBattery(Battery):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new battery type yet (i.e. for use with
-        [`UnrecognizedBattery`][frequenz.client.microgrid.component.UnrecognizedBattery]).
+        [`UnrecognizedBattery`][frequenz.client.assets.electrical_component.UnrecognizedBattery]).
     """
 
 
@@ -98,7 +98,7 @@ class LiIonBattery(Battery):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new battery type yet (i.e. for use with
-        [`UnrecognizedBattery`][frequenz.client.microgrid.component.UnrecognizedBattery]).
+        [`UnrecognizedBattery`][frequenz.client.assets.electrical_component.UnrecognizedBattery]).
     """
 
 
@@ -115,7 +115,7 @@ class NaIonBattery(Battery):
 
         It is only provided for using with a newer version of the API where the client
         doesn't know about the new battery type yet (i.e. for use with
-        [`UnrecognizedBattery`][frequenz.client.microgrid.component.UnrecognizedBattery]).
+        [`UnrecognizedBattery`][frequenz.client.assets.electrical_component.UnrecognizedBattery]).
     """
 
 
