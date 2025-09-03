@@ -124,7 +124,7 @@ class AssetsApiClient(
 
         return microgrid_from_proto(microgrid.microgrid)
 
-    async def get_electrical_components(
+    async def list_electrical_components(
         self, microgrid_id: int
     ) -> list[ElectricalComponent]:
         """

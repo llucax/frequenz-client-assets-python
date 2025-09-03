@@ -12,7 +12,7 @@ This release introduces a Assets API client with CLI support for interacting wit
 ## New Features
 
 * **Assets API Client**:
-  * `get_electrical_components()` method for retrieving electrical components in a microgrid
+  * `list_electrical_components()` method for retrieving electrical components in a microgrid
 
 * **Electrical Components Support**: Comprehensive data classes for electrical components
   * `ElectricalComponent` with category-specific information for batteries, EV chargers, inverters, grid connection points, and power transformers

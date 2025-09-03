@@ -37,3 +37,16 @@ async def test_get_microgrid_details(
 ) -> None:
     """Test get_microgrid_details method."""
     await spec.test_unary_unary_call(client, "GetMicrogrid")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "spec",
+    get_test_specs("list_electrical_components", tests_dir=TESTS_DIR),
+    ids=str,
+)
+async def test_list_electrical_components(
+    client: AssetsApiClient, spec: ApiClientTestCaseSpec
+) -> None:
+    """Test list_components method."""
+    await spec.test_unary_unary_call(client, "ListMicrogridElectricalComponents")

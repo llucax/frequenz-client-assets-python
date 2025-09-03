@@ -157,7 +157,7 @@ async def get_microgrid(
 @cli.command("electrical-components")
 @click.pass_context
 @click.argument("microgrid-id", required=True, type=int)
-async def get_electrical_components(
+async def list_electrical_components(
     ctx: click.Context,
     microgrid_id: int,
 ) -> None:
@@ -186,7 +186,7 @@ async def get_electrical_components(
     """
     try:
         client = ctx.obj["client"]
-        electrical_components = await client.get_electrical_components(microgrid_id)
+        electrical_components = await client.list_electrical_components(microgrid_id)
         print_electrical_components(electrical_components)
     except ApiClientError as e:
         error_dict = {
